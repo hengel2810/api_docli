@@ -1,6 +1,6 @@
 FROM golang:latest
-RUN mkdir shared
 WORKDIR /go/src
+RUN mkdir shared
 COPY ./src .
 RUN go get "github.com/gorilla/mux"
 RUN go get "github.com/docker/docker/client"
