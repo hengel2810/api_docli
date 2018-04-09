@@ -5,7 +5,7 @@ sudo: required
 services:
   - docker
 script:
-  - export REPO=hengel2810/webpage
+  - export REPO=hengel2810/api_docli
   - export COMMIT=latest
   - docker build -f Dockerfile -t $REPO:$COMMIT .
   - docker run -d $REPO:$COMMIT
