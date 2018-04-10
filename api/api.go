@@ -3,8 +3,8 @@ package api
 import (
 	"fmt"
 	"net/http"
-	"fs"
-	"docker"
+	"github.com/hengel2810/api_docli/docker"
+	"github.com/hengel2810/api_docli/fs"
 )
 
 func HandlePostImage(w http.ResponseWriter, r *http.Request) {
