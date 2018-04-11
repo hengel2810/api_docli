@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func LoadContainer(path string) error {
+func LoadImage(path string) error {
 	cli, err := client.NewEnvClient()
 	if err != nil {
 		fmt.Println(err)

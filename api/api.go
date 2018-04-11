@@ -30,7 +30,7 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 	}
 	imageName := r.FormValue("image")
 	if(len(imageName) > 0) {
-		err = docker.LoadContainer(imagePath)
+		err = docker.LoadImage(imagePath)
 		if err == nil {
 			w.WriteHeader(http.StatusOK)
 		} else {
