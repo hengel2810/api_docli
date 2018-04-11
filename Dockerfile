@@ -1,4 +1,5 @@
 FROM golang:latest
+
 RUN mkdir -p /go/src/github.com/hengel2810/api_docli
 WORKDIR /go/src/github.com/hengel2810/api_docli
 RUN mkdir shared
