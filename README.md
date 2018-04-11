@@ -2,7 +2,7 @@
 
 
 <p>
-	<img src="https://travis-ci.org/hengel2810/api_docli.svg?branch=master"/>
+	<img src="https://travis-ci.com/hengel2810/api_docli.svg?token=jYdiyC69sDnxGnDxRqoJ&branch=master"/>
 </p>
 
 ## Using docker image
