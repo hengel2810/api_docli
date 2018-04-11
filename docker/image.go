@@ -8,7 +8,7 @@ import (
 )
 
 func LoadImage(path string) error {
-	cli, err := client.NewEnvClient()
+	dockerClient, err := client.NewEnvClient()
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -18,7 +18,7 @@ func LoadImage(path string) error {
 		fmt.Println(err)
 		return err
 	}
-	resp, err := cli.ImageLoad(context.Background(), reader, false)
+	resp, err := dockerClient.ImageLoad(context.Background(), reader, false)
 	if err != nil {
 		fmt.Println(err)
 		return err
