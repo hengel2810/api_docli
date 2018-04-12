@@ -8,7 +8,7 @@ import (
 )
 
 func InsertImage(image models.RequestDockerImage) bool {
-	session, err := mgo.Dial("localhost:27017")
+	session, err := mgo.Dial("mongo_db:27017")
 	if err != nil {
 		return false
 	}
@@ -23,7 +23,7 @@ func InsertImage(image models.RequestDockerImage) bool {
 
 func LoadImages() []models.RequestDockerImage {
 	var results []models.RequestDockerImage
-	session, err := mgo.Dial("localhost:27017")
+	session, err := mgo.Dial("mongo_db:27017")
 	if err != nil {
 		return results
 	}
