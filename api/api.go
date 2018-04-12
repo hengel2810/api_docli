@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"github.com/hengel2810/api_docli/docker"
 	"fmt"
+	"github.com/hengel2810/api_docli/database"
 )
 
 func HandlePostImage(w http.ResponseWriter, r *http.Request) {
@@ -11,7 +12,12 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 	if err.StatusCode == 200 {
 		err := docker.ImportDockerImage(image)
 		if err == nil {
-			w.WriteHeader(http.StatusOK)
+			dbSuccess := database.InsertImage(image)
+			if dbSuccess {
+				w.WriteHeader(http.StatusOK)
+			} else {
+				w.WriteHeader(http.StatusInternalServerError)
+			}
 		} else {
 			fmt.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)
