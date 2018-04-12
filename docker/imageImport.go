@@ -5,15 +5,16 @@ import (
 	"golang.org/x/net/context"
 	"fmt"
 	"os"
+	"github.com/hengel2810/api_docli/models"
 )
 
-func LoadImage(path string) error {
+func ImportDockerImage(requestDockerImage models.RequestDockerImage) error {
 	dockerClient, err := client.NewEnvClient()
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
-	reader, err := os.Open(path)
+	reader, err := os.Open(requestDockerImage.Path)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -23,6 +24,7 @@ func LoadImage(path string) error {
 		fmt.Println(err)
 		return err
 	}
+	fmt.Println(resp)
 	err = resp.Body.Close()
 	if err != nil {
 		fmt.Println(err)
