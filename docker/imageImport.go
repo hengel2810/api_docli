@@ -24,7 +24,7 @@ func ImportDockerImage(requestDockerImage models.RequestDockerImage) error {
 		fmt.Println(err)
 		return err
 	}
-	fmt.Println(resp)
+
 	err = resp.Body.Close()
 	if err != nil {
 		fmt.Println(err)

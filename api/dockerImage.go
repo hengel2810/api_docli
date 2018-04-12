@@ -6,6 +6,7 @@ import (
 	"github.com/hengel2810/api_docli/fs"
 	"github.com/hengel2810/api_docli/helper"
 	"github.com/hengel2810/api_docli/models"
+	"github.com/satori/go.uuid"
 )
 
 func DockerImageFromRequest(r *http.Request) (models.RequestDockerImage, models.RequestDockerImageError) {
@@ -31,6 +32,10 @@ func DockerImageFromRequest(r *http.Request) (models.RequestDockerImage, models.
 	if imageName == "" || len(imageName) == 0 {
 		return models.RequestDockerImage{}, models.RequestDockerImageError{StatusCode: 400, Msg:"missing image name"}
 	}
-	img := models.RequestDockerImage{Name: imageName, Path: imagePath, UserId:userId, Uploaded: time.Now()}
+	uniqueImageTag, err := uuid.NewV4()
+	if err != nil {
+		return models.RequestDockerImage{}, models.RequestDockerImageError{StatusCode: 500, Msg:"error on unique tag creation"}
+	}
+	img := models.RequestDockerImage{Name: imageName, Path: imagePath, UserId:userId, Uploaded: time.Now(), UniqueTag:uniqueImageTag.String() }
 	return img, models.RequestDockerImageError{StatusCode: 200}
 }

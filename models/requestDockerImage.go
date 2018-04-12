@@ -7,6 +7,7 @@ type RequestDockerImage struct {
 	Path  string
 	UserId string
 	Uploaded time.Time
+	UniqueTag string
 }
 
 type RequestDockerImageError struct {
