@@ -9,11 +9,11 @@ import (
 func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 	image, err := DockerImageFromRequest(r)
 	if err.StatusCode == 200 {
-		fmt.Println(image)
 		err := docker.ImportDockerImage(image)
 		if err == nil {
 			w.WriteHeader(http.StatusOK)
 		} else {
+			fmt.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	} else {
