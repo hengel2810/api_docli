@@ -9,6 +9,7 @@ RUN go get "github.com/docker/docker/client"
 RUN go get "golang.org/x/net/context"
 RUN go get "gopkg.in/mgo.v2"
 RUN go get "github.com/auth0/go-jwt-middleware"
+RUN go get "github.com/codegangsta/negroni"
 RUN go get "github.com/dgrijalva/jwt-go"
 RUN go get "github.com/satori/go.uuid"
 RUN go build main.go
