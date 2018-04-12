@@ -5,10 +5,15 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"fmt"
+	"os"
 )
 
 func InsertImage(image models.RequestDockerImage) bool {
-	session, err := mgo.Dial("mongo_db:27017")
+	mongoURL := os.Getenv("MONGOURL")
+	if mongoURL == "" {
+		mongoURL = "localhost"
+	}
+	session, err := mgo.Dial(mongoURL + ":27017")
 	if err != nil {
 		return false
 	}
