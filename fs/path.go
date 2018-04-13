@@ -2,6 +2,7 @@ package fs
 
 import (
 	"os"
+	"strings"
 )
 
 func TmpDockerImagePath (filename string, userId string) string {
@@ -11,7 +12,8 @@ func TmpDockerImagePath (filename string, userId string) string {
 	}
 	userDirPath := dir + "/shared/" + userId
 	userFolderCreate(userDirPath)
-	fullPath := userDirPath + "/" + filename
+	escapedFileName := strings.Replace(filename, "/", "_", -1)
+	fullPath := userDirPath + "/" + escapedFileName
 	return fullPath
 }
 
