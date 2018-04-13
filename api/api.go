@@ -23,6 +23,7 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	} else {
+		fmt.Println(err)
 		w.WriteHeader(err.StatusCode)
 	}
 }
