@@ -3,14 +3,9 @@ package models
 import "time"
 
 type RequestDockerImage struct {
-	Name string
-	Path  string
-	UserId string
+	FullName   string      `json:"full_name"`
+	UserId   string      `json:"user_id"`
+	OriginalName   string      `json:"original_name"`
+	UniqueId   string      `json:"unique_id"`
 	Uploaded time.Time
-	UniqueTag string
-}
-
-type RequestDockerImageError struct {
-	StatusCode int
-	Msg string
 }

@@ -15,12 +15,14 @@ func InsertImage(image models.RequestDockerImage) bool {
 	}
 	session, err := mgo.Dial(mongoURL + ":27017")
 	if err != nil {
+		fmt.Println(err)
 		return false
 	}
 	defer session.Close()
 	c := session.DB("main").C("images")
 	err = c.Insert(image)
 	if err != nil {
+		fmt.Println(err)
 		return false
 	}
 	return true
