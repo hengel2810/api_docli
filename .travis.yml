@@ -14,6 +14,10 @@ after_install:
 script:
   - cd $HOME/gopath/
   - ls -lf
+  - cd bin
+  - ls -lf
+  - cd ../pkg
+  - ls -lf
   - export REPO=hengel2810/api_docli
   - export COMMIT=latest
   - docker build -f Dockerfile -t $REPO:$COMMIT .
