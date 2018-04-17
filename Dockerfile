@@ -5,15 +5,9 @@ WORKDIR /go/src/github.com/hengel2810/api_docli
 RUN mkdir shared
 COPY . .
 RUN go get "github.com/gorilla/mux"
-RUN echo "##########################"
-RUN echo "##########################"
-RUN echo "##########################"
-RUN go get "github.com/docker/docker/client"
-RUN echo "##########################"
+RUN go get -u "github.com/docker/docker/client"
 RUN echo "##########################"
 RUN rm -rf /go/src/github.com/docker/docker/vendor/github.com/docker/go-connections
-RUN echo "##########################"
-RUN echo "##########################"
 RUN echo "##########################"
 RUN go get "golang.org/x/net/context"
 RUN go get "gopkg.in/mgo.v2"
