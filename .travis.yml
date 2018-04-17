@@ -12,6 +12,7 @@ after_install:
   - rm -rf $GOPATH/src/github.com/docker/docker/vendor/github.com/docker/go-connections
 
 script:
+  - go build -o api_docli
   - cd $HOME/gopath/
   - ls -lf
   - cd bin
