@@ -6,9 +6,7 @@ RUN mkdir shared
 COPY . .
 RUN go get "github.com/gorilla/mux"
 RUN go get -u "github.com/docker/docker/client"
-RUN echo "##########################"
 RUN rm -rf /go/src/github.com/docker/docker/vendor/github.com/docker/go-connections
-RUN echo "##########################"
 RUN go get "golang.org/x/net/context"
 RUN go get "gopkg.in/mgo.v2"
 RUN go get "github.com/auth0/go-jwt-middleware"
