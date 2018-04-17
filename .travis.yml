@@ -12,6 +12,7 @@ after_install:
   - rm -rf $GOPATH/src/github.com/docker/docker/vendor/github.com/docker/go-connections
 
 script:
+  - cd $HOME/gopath/
   - ls -lf
   - export REPO=hengel2810/api_docli
   - export COMMIT=latest
