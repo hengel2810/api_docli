@@ -1,4 +1,4 @@
-FROM scratch
+FROM alpine
 RUN mkdir shared
 COPY ./api_docli /
 EXPOSE 8000
