@@ -13,6 +13,9 @@ RUN go get "github.com/codegangsta/negroni"
 RUN go get "github.com/dgrijalva/jwt-go"
 RUN go get "github.com/satori/go.uuid"
 RUN go get "github.com/Pallinder/sillyname-go"
+RUN go get "github.com/docker/go-connections/nat"
+RUN rm -rf /go/src/github.com/docker/docker/vendor/github.com/docker/go-connections
+RUN go get "github.com/pkg/errors"
 RUN go build main.go
 ENV GOPATH=/go/src
 CMD ["/go/src/github.com/hengel2810/api_docli/main"]

@@ -2,6 +2,7 @@ package models
 
 import (
 	"time"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func DocliObjectValid(docliObject DocliObject) bool {
@@ -21,6 +22,7 @@ func DocliObjectValid(docliObject DocliObject) bool {
 }
 
 type DocliObject struct {
+	Id bson.ObjectId `json:"id,omitempty" bson:"_id,omitempty"`
 	FullName string `json:"full_name"`
 	UserId string `json:"user_id"`
 	OriginalName string `json:"image_name"`
@@ -29,9 +31,10 @@ type DocliObject struct {
 	Networks []string `json:"networks"`
 	Volumes []string `json:"volumes"`
 	Uploaded time.Time
+	ContainerName string
 }
 
 type PortObject struct {
-	InternalPort int `json:"ex"`
-	ExternalPort int `json:"int"`
+	Container int `json:"container"`
+	Host int `json:"host"`
 }
