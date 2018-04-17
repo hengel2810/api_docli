@@ -8,28 +8,26 @@ import (
 	"os"
 )
 
-func InsertImage(image models.RequestDockerImage) bool {
+func InsertImage(image models.DocliObject) error {
 	mongoURL := os.Getenv("MONGOURL")
 	if mongoURL == "" {
 		mongoURL = "localhost"
 	}
 	session, err := mgo.Dial(mongoURL + ":27017")
 	if err != nil {
-		fmt.Println(err)
-		return false
+		return err
 	}
 	defer session.Close()
 	c := session.DB("main").C("images")
 	err = c.Insert(image)
 	if err != nil {
-		fmt.Println(err)
-		return false
+		return err
 	}
-	return true
+	return nil
 }
 
-func LoadImages() []models.RequestDockerImage {
-	var results []models.RequestDockerImage
+func LoadImages() []models.DocliObject {
+	var results []models.DocliObject
 	session, err := mgo.Dial("mongo_db:27017")
 	if err != nil {
 		return results

@@ -4,27 +4,23 @@ import (
 	"github.com/docker/docker/client"
 	"golang.org/x/net/context"
 	"github.com/docker/docker/api/types"
-	"fmt"
 	"io"
 	"os"
 )
 
-func PullImage(image string) bool {
+func PullImage(image string) error {
 	cli, err := client.NewEnvClient()
 	if err != nil {
-		fmt.Println(err)
-		return  false
+		return  err
 	}
 	closer, err := cli.ImagePull(context.Background(), image, types.ImagePullOptions{All: true, RegistryAuth:"123"})
 	if err != nil {
-		fmt.Println(err)
-		return false
+		return err
 	}
 	_, err = io.Copy(os.Stdout, closer)
 	if err != nil {
-		fmt.Println(err)
-		return false
+		return err
 	}
 	closer.Close()
-	return true
+	return nil
 }
