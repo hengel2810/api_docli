@@ -74,7 +74,6 @@ func createPorts(docli models.DocliObject) (nat.PortSet, nat.PortMap, error) {
 	for _, portObject := range docli.Ports {
 		port, err := nat.NewPort("tcp", strconv.Itoa(portObject.Container))
 		if err != nil {
-			fmt.Println(err)
 			return exposedPorts, portBindings, errors.New("error creating port")
 		}
 		exposedPorts[port] = struct{}{}
