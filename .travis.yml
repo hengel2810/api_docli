@@ -10,6 +10,18 @@ install:
   - dep ensure
 after_install:
   - rm -rf $GOPATH/src/github.com/docker/docker/vendor/github.com/docker/go-connections
+script:
+  - export REPO=hengel2810/api_docli
+  - export COMMIT=latest
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker run -d $REPO:$COMMIT
+  - docker ps -a
+after_success:
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - export TAG=master
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO
 
 #  - docker run --rm -v "$PWD":/go/src/github.com/hengel2810/api_docli -w /go/src/github.com/hengel2810/api_docli iron/go:dev go build -o myapp
 #  - docker build -t $USERNAME/$IMAGE:latest .
