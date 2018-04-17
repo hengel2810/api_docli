@@ -8,6 +8,8 @@ import (
 	"github.com/hengel2810/api_docli/models"
 	"errors"
 	"fmt"
+	"strconv"
+	"github.com/docker/go-connections/nat"
 )
 
 func StartContainer(docli models.DocliObject) error {
@@ -50,25 +52,24 @@ func StopContainer(docli models.DocliObject) error {
 
 
 func generateConfigs(docli models.DocliObject) (*container.Config, *container.HostConfig, error) {
-	//exposedPorts, portBindings, err := createPorts(docli)
-	//if err != nil {
-	//	return &container.Config{}, &container.HostConfig{}, err
-	//}
+	exposedPorts, portBindings, err := createPorts(docli)
+	if err != nil {
+		return &container.Config{}, &container.HostConfig{}, err
+	}
 	config := &container.Config {
 		Image: docli.FullName,
-		//ExposedPorts: exposedPorts,
+		ExposedPorts: exposedPorts,
 	}
 
 	hostConfig := &container.HostConfig {
 		//Binds: []string{
 		//	"/var/run/docker.sock:/var/run/docker.sock",
 		//},
-		//PortBindings: portBindings,
+		PortBindings: portBindings,
 	}
 	return config, hostConfig, nil
 }
 
-/*
 func createPorts(docli models.DocliObject) (nat.PortSet, nat.PortMap, error) {
 	exposedPorts := nat.PortSet{}
 	portBindings := nat.PortMap{}
@@ -87,4 +88,3 @@ func createPorts(docli models.DocliObject) (nat.PortSet, nat.PortMap, error) {
 	}
 	return exposedPorts, portBindings, nil
 }
-*/
