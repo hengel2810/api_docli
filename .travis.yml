@@ -10,7 +10,9 @@ install:
   - dep ensure
 after_install:
   - rm -rf $GOPATH/src/github.com/docker/docker/vendor/github.com/docker/go-connections
+
 script:
+  - ls -lf
   - export REPO=hengel2810/api_docli
   - export COMMIT=latest
   - docker build -f Dockerfile -t $REPO:$COMMIT .
