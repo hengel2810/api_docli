@@ -2,20 +2,25 @@ language: go
 go:
   - "1.10"
 sudo: required
-services:
-  - docker
-script:
-  - export REPO=hengel2810/api_docli
-  - export COMMIT=latest
-  - docker build -f Dockerfile -t $REPO:$COMMIT .
-  - docker run -d $REPO:$COMMIT
-  - docker ps -a
-after_success:
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS
-  - export TAG=master
-  - docker tag $REPO:$COMMIT $REPO:$TAG
-  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
-  - docker push $REPO
+before_install:
+  - curl -L -s https://github.com/golang/dep/releases/download/v0.4.1/dep-linux-amd64 -o $GOPATH/bin/dep
+  - chmod +x $GOPATH/bin/dep
+install:
+  - dep ensure
+#services:
+#  - docker
+#script:
+#  - export REPO=hengel2810/api_docli
+#  - export COMMIT=latest
+#  - docker build -f Dockerfile -t $REPO:$COMMIT .
+#  - docker run -d $REPO:$COMMIT
+#  - docker ps -a
+#after_success:
+#  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+#  - export TAG=master
+#  - docker tag $REPO:$COMMIT $REPO:$TAG
+#  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+#  - docker push $REPO
 
 env:
   global:
