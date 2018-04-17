@@ -1,0 +1,43 @@
+[[dependencies]]
+  branch = "master"
+  name = "github.com/gorilla/context"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/docker/docker/client"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/docker/go-connections/nat"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/pkg/errors"
+
+[[dependencies]]
+  branch = "master"
+  name = "golang.org/x/net/context"
+
+[[dependencies]]
+  branch = "master"
+  name = "gopkg.in/mgo.v2"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/auth0/go-jwt-middleware"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/codegangsta/negroni"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/dgrijalva/jwt-go"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/satori/go.uuid"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/Pallinder/sillyname-go"
