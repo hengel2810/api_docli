@@ -11,9 +11,6 @@ install:
 after_install:
   - rm -rf $GOPATH/src/github.com/docker/docker/vendor/github.com/docker/go-connections
 
-after_build:
-  - go build -o api_docli
-  - ls -la
 #  - docker run --rm -v "$PWD":/go/src/github.com/hengel2810/api_docli -w /go/src/github.com/hengel2810/api_docli iron/go:dev go build -o myapp
 #  - docker build -t $USERNAME/$IMAGE:latest .
 #services:

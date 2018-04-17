@@ -1,5 +1,4 @@
-FROM iron/go
-WORKDIR /app
-# Now just add the binary
-ADD myapp /app/
-ENTRYPOINT ["./myapp"]
+FROM scratch
+COPY dist/api_docli /
+EXPOSE 8000
+ENTRYPOINT ["/traefik"]
