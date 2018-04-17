@@ -5,6 +5,9 @@ WORKDIR /go/src/github.com/hengel2810/api_docli
 RUN mkdir shared
 RUN go get github.com/gorilla/mux
 RUN go get github.com/docker/docker/client
+RUN echo "###################"
+RUN echo "###################"
+RUN echo "###################"
 RUN rm -rf ../../docker/docker/vendor/github.com/docker/go-connections
 RUN ls -la
 RUN go get github.com/docker/go-connections/nat
