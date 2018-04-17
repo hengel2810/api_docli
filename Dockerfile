@@ -1,4 +1,4 @@
-FROM iron/go:dev
+FROM ubuntu
 RUN mkdir shared
 COPY ./api_docli_app /
 EXPOSE 8000
