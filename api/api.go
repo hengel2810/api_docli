@@ -9,6 +9,8 @@ import (
 	"time"
 	"github.com/Pallinder/sillyname-go"
 	"strings"
+	"github.com/phayes/freeport"
+	"errors"
 )
 
 func HandlePostImage(w http.ResponseWriter, r *http.Request) {
@@ -19,12 +21,16 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		validImage := models.DocliObjectValid(docli)
 		if validImage {
-			docli = setDocliData(docli)
-			err = docker.SetupDocli(docli)
+			docli, err = setDocliData(docli)
 			if err == nil {
-				_, err := database.InsertDocli(docli)
+				err = docker.SetupDocli(docli)
 				if err == nil {
-					w.WriteHeader(http.StatusOK)
+					_, err := database.InsertDocli(docli)
+					if err == nil {
+						w.WriteHeader(http.StatusOK)
+					} else {
+						handleWriter(w, http.StatusInternalServerError, err.Error())
+					}
 				} else {
 					handleWriter(w, http.StatusInternalServerError, err.Error())
 				}
@@ -42,13 +48,23 @@ func handleWriter(w http.ResponseWriter, statusCode int, errorString string) {
 	w.Write([]byte(errorString))
 }
 
-func setDocliData(docli models.DocliObject) models.DocliObject {
+func setDocliData(docli models.DocliObject) (models.DocliObject, error) {
 	docli.Uploaded = time.Now()
 	containerName := sillyname.GenerateStupidName()
 	containerName = strings.ToLower(containerName)
 	containerName = strings.Replace(containerName, " ", "-", -1)
 	containerName = docli.UserId + "-" + containerName
+	serverPorts := []models.PortObject{}
+	for _, port := range docli.Ports {
+		freePort, err := freeport.GetFreePort()
+		if err != nil {
+			return docli, errors.New("error checking free port")
+		}
+		serverPort := models.PortObject{Container:port, Host:freePort}
+		serverPorts = append(serverPorts, serverPort)
+	}
+	docli.ServerPorts = serverPorts
 	docli.ContainerName = containerName
-	return docli
+	return docli, nil
 }
 

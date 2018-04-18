@@ -73,8 +73,8 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 func createPorts(docli models.DocliObject) (nat.PortSet, nat.PortMap, error) {
 	exposedPorts := nat.PortSet{}
 	portBindings := nat.PortMap{}
-	for _, portObject := range docli.Ports {
-		port, err := nat.NewPort("tcp", strconv.Itoa(portObject.Container))
+	for _, serverPort := range docli.ServerPorts {
+		port, err := nat.NewPort("tcp", strconv.Itoa(serverPort.Container))
 		if err != nil {
 			return exposedPorts, portBindings, errors.New("error creating port")
 		}
@@ -82,7 +82,7 @@ func createPorts(docli models.DocliObject) (nat.PortSet, nat.PortMap, error) {
 		portBindings[port] = []nat.PortBinding {
 			{
 				HostIP: "0.0.0.0",
-				HostPort: strconv.Itoa(portObject.Host),
+				HostPort: strconv.Itoa(serverPort.Host),
 			},
 		}
 	}

@@ -27,7 +27,8 @@ type DocliObject struct {
 	UserId string `json:"user_id"`
 	OriginalName string `json:"image_name"`
 	UniqueId string `json:"unique_id"`
-	Ports []PortObject `json:"ports"`
+	Ports []int `json:"ports"`
+	ServerPorts []PortObject `json:"server_ports"`
 	Networks []string `json:"networks"`
 	Volumes []string `json:"volumes"`
 	Uploaded time.Time
