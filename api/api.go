@@ -47,6 +47,7 @@ func setDocliData(docli models.DocliObject) models.DocliObject {
 	containerName := sillyname.GenerateStupidName()
 	containerName = strings.ToLower(containerName)
 	containerName = strings.Replace(containerName, " ", "-", -1)
+	containerName = docli.UserId + "-" + containerName
 	docli.ContainerName = containerName
 	return docli
 }
