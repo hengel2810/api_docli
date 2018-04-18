@@ -41,3 +41,7 @@
 [[dependencies]]
   branch = "master"
   name = "github.com/Pallinder/sillyname-go"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/phayes/freeport"
