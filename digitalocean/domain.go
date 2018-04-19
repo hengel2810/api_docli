@@ -6,7 +6,6 @@ import (
 	"golang.org/x/oauth2"
 	"errors"
 	"fmt"
-	"os"
 )
 
 type TokenSource struct {
@@ -20,11 +19,11 @@ func (t *TokenSource) Token() (*oauth2.Token, error) {
 	return token, nil
 }
 
-var token = os.Getenv("DO_TOKEN")
+var Token string
 func CreateSubdomain(subdomain string) error {
-	fmt.Println("### TOKEN: " + token)
+	fmt.Println("### TOKEN: " + Token)
 	tokenSource := &TokenSource{
-		AccessToken: token,
+		AccessToken: Token,
 	}
 	oauthClient := oauth2.NewClient(context.Background(), tokenSource)
 	client := godo.NewClient(oauthClient)
