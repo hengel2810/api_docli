@@ -1,12 +1,12 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"github.com/gorilla/mux"
 	"github.com/hengel2810/api_docli/middleware"
 	"github.com/codegangsta/negroni"
 	"github.com/hengel2810/api_docli/api"
+	"log"
 )
 
 func main() {

@@ -4,13 +4,14 @@ import (
 	"net/http"
 	"encoding/json"
 	"github.com/hengel2810/api_docli/models"
-	"github.com/hengel2810/api_docli/docker"
-	"github.com/hengel2810/api_docli/database"
 	"time"
 	"github.com/Pallinder/sillyname-go"
 	"strings"
 	"github.com/phayes/freeport"
 	"errors"
+	"github.com/hengel2810/api_docli/digitalocean"
+	"github.com/hengel2810/api_docli/docker"
+	"github.com/hengel2810/api_docli/database"
 )
 
 func HandlePostImage(w http.ResponseWriter, r *http.Request) {
@@ -21,13 +22,18 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		validImage := models.DocliObjectValid(docli)
 		if validImage {
-			docli, err = setDocliData(docli)
+			err := digitalocean.CreateSubdomain(docli.ContainerName)
 			if err == nil {
-				err = docker.SetupDocli(docli)
+				docli, err = setDocliData(docli)
 				if err == nil {
-					_, err := database.InsertDocli(docli)
+					err = docker.SetupDocli(docli)
 					if err == nil {
-						w.WriteHeader(http.StatusOK)
+						_, err := database.InsertDocli(docli)
+						if err == nil {
+							w.WriteHeader(http.StatusOK)
+						} else {
+							handleWriter(w, http.StatusInternalServerError, err.Error())
+						}
 					} else {
 						handleWriter(w, http.StatusInternalServerError, err.Error())
 					}
@@ -35,7 +41,7 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 					handleWriter(w, http.StatusInternalServerError, err.Error())
 				}
 			} else {
-				handleWriter(w, http.StatusInternalServerError, err.Error())
+				handleWriter(w, http.StatusBadRequest, "error creatin subdomain")
 			}
 		} else {
 			handleWriter(w, http.StatusBadRequest, "wrong request object")

@@ -6,7 +6,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"encoding/json"
-	"fmt"
 )
 
 type Jwks struct {
@@ -38,8 +37,6 @@ func JWTMiddleware() *jwtmiddleware.JWTMiddleware {
 			cert, err := getPemCert(token)
 			if err != nil {
 				return token, errors.New("request cert error")
-				fmt.Println("######### NO CERT ########")
-				fmt.Println(err)
 			}
 			result, _ := jwt.ParseRSAPublicKeyFromPEM([]byte(cert))
 			return result, nil

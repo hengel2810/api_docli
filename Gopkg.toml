@@ -45,3 +45,12 @@
 [[dependencies]]
   branch = "master"
   name = "github.com/phayes/freeport"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/digitalocean/godo"
+
+[[dependencies]]
+  branch = "master"
+  name = "golang.org/x/oauth2"
+
