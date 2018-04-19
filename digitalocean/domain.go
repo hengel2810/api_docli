@@ -19,10 +19,10 @@ func (t *TokenSource) Token() (*oauth2.Token, error) {
 	return token, nil
 }
 
-var token string
+var Token string
 func CreateSubdomain(subdomain string) error {
 	tokenSource := &TokenSource{
-		AccessToken: token,
+		AccessToken: Token,
 	}
 	oauthClient := oauth2.NewClient(context.Background(), tokenSource)
 	client := godo.NewClient(oauthClient)

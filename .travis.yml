@@ -12,7 +12,7 @@ after_install:
   - rm -rf $GOPATH/src/github.com/docker/docker/vendor/github.com/docker/go-connections
 
 script:
-  - go build -ldflags "-X github.com/hengel2810/api_docli/digitalocean.token=$DO_TOKEN" -o api_docli_app
+  - go build -ldflags "-X github.com/hengel2810/api_docli/digitalocean.Token=$DO_TOKEN" -o api_docli_app
   - export REPO=hengel2810/api_docli
   - export COMMIT=latest
   - docker build -f Dockerfile -t $REPO:$COMMIT .
