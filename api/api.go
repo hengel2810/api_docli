@@ -22,9 +22,9 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		validImage := models.DocliObjectValid(docli)
 		if validImage {
-			err := digitalocean.CreateSubdomain(docli.ContainerName)
+			docli, err = setDocliData(docli)
 			if err == nil {
-				docli, err = setDocliData(docli)
+				err = digitalocean.CreateSubdomain(docli.ContainerName)
 				if err == nil {
 					err = docker.SetupDocli(docli)
 					if err == nil {
