@@ -51,10 +51,7 @@ func JWTMiddleware() *jwtmiddleware.JWTMiddleware {
 
 func getPemCert(token *jwt.Token) (string, error) {
 	cert := ""
-	resp, err := http.Get("https://google.com")
-	fmt.Println(resp)
-	fmt.Println(err)
-	resp, err = http.Get("https://hengel28.auth0.com/.well-known/jwks.json")
+	resp, err := http.Get("https://hengel28.auth0.com/.well-known/jwks.json")
 	if err != nil {
 		return cert, err
 	}
@@ -64,7 +61,6 @@ func getPemCert(token *jwt.Token) (string, error) {
 	if err != nil {
 		return cert, err
 	}
-
 	x5c := jwks.Keys[0].X5c
 	for k, v := range x5c {
 		if token.Header["kid"] == jwks.Keys[k].Kid {
