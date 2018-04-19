@@ -50,6 +50,19 @@ func StopContainer(docli models.DocliObject) error {
 	return nil
 }
 
+func ConnectToNetwork(containerId string, networkId string) error {
+	cli, err := client.NewEnvClient()
+	if err != nil {
+		return errors.New("error creating docker client")
+	}
+	err = cli.NetworkConnect(context.Background(), networkId, containerId, nil)
+	if err != nil {
+		fmt.Println(err)
+		return errors.New("error connecting container to network")
+	}
+	return nil
+}
+
 
 func generateConfigs(docli models.DocliObject) (*container.Config, *container.HostConfig, error) {
 	exposedPorts, portBindings, err := createPorts(docli)
@@ -69,7 +82,6 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 		ExposedPorts: exposedPorts,
 		Labels: labels,
 	}
-
 	hostConfig := &container.HostConfig {
 		//Binds: []string{
 		//	"/var/run/docker.sock:/var/run/docker.sock",
