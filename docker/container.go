@@ -76,7 +76,7 @@ func ConnectToNetwork(containerId string, networkId string) error {
 
 
 func generateConfigs(docli models.DocliObject) (*container.Config, *container.HostConfig, error) {
-	exposedPorts, _, err := createPorts(docli)
+	exposedPorts, portBindings, err := createPorts(docli)
 	if err != nil {
 		return &container.Config{}, &container.HostConfig{}, err
 	}
@@ -95,7 +95,7 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 	}
 	hostConfig := &container.HostConfig {
 		Binds: []string{},
-		PortBindings: nat.PortMap{},
+		PortBindings: portBindings,
 		NetworkMode: "web",
 		RestartPolicy: container.RestartPolicy{
 			Name: "always",
