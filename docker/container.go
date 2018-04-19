@@ -98,6 +98,7 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 		//	"/var/run/docker.sock:/var/run/docker.sock",
 		//},
 		//PortBindings: portBindings,
+		NetworkMode: "web",
 	}
 	return config, hostConfig, nil
 }
