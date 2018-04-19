@@ -35,12 +35,11 @@ func JWTMiddleware() *jwtmiddleware.JWTMiddleware {
 			if !checkIss {
 				return token, errors.New("Invalid issuer.")
 			}
-
 			cert, err := getPemCert(token)
 			if err != nil {
-				panic(err.Error())
+				fmt.Println("######### NO CERT ########")
+				fmt.Println(err)
 			}
-
 			result, _ := jwt.ParseRSAPublicKeyFromPEM([]byte(cert))
 			return result, nil
 		},
@@ -50,21 +49,14 @@ func JWTMiddleware() *jwtmiddleware.JWTMiddleware {
 }
 
 func getPemCert(token *jwt.Token) (string, error) {
-	fmt.Println("############## 111 ################")
 	cert := ""
 	resp, err := http.Get("https://hengel28.auth0.com/.well-known/jwks.json")
-	fmt.Println("############## 222 ################")
-	fmt.Println(resp)
-	fmt.Println(err)
-	fmt.Println("############## 333 ################")
 	if err != nil {
 		return cert, err
 	}
 	defer resp.Body.Close()
-	fmt.Println("############## 444 ################")
 	var jwks = Jwks{}
 	err = json.NewDecoder(resp.Body).Decode(&jwks)
-	fmt.Println("############## 555 ################")
 	if err != nil {
 		return cert, err
 	}
@@ -80,6 +72,5 @@ func getPemCert(token *jwt.Token) (string, error) {
 		err := errors.New("Unable to find appropriate key.")
 		return cert, err
 	}
-	fmt.Println("############## 666 ################")
 	return cert, nil
 }
