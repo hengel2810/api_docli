@@ -56,9 +56,18 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 	if err != nil {
 		return &container.Config{}, &container.HostConfig{}, err
 	}
+	url := "Host:" + docli.ContainerName + ".valas.cloud"
+	labels := map[string]string{
+		"traefik.backend": docli.ContainerName,
+		"traefik.docker.network": "traefik",
+		"traefik.frontend.rule": url,
+		"traefik.enable": "true",
+		"traefik.port": strconv.Itoa(docli.ServerPorts[0].Host),
+	}
 	config := &container.Config {
 		Image: docli.FullName,
 		ExposedPorts: exposedPorts,
+		Labels: labels,
 	}
 
 	hostConfig := &container.HostConfig {
