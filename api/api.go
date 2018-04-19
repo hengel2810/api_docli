@@ -11,9 +11,11 @@ import (
 	"strings"
 	"github.com/phayes/freeport"
 	"errors"
+	"fmt"
 )
 
 func HandlePostImage(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("############## 333 ################")
 	decoder := json.NewDecoder(r.Body)
 	defer r.Body.Close()
 	var docli models.DocliObject

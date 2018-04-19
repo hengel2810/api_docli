@@ -6,6 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"encoding/json"
+	"fmt"
 )
 
 type Jwks struct {
@@ -22,8 +23,10 @@ type JSONWebKeys struct {
 }
 
 func JWTMiddleware() *jwtmiddleware.JWTMiddleware {
+	fmt.Println("############## 444 ################")
 	jwtMiddleware := jwtmiddleware.New(jwtmiddleware.Options {
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
+			fmt.Println("############## 555 ################")
 			aud := "https://api.docli.com"
 			checkAud := token.Claims.(jwt.MapClaims).VerifyAudience(aud, false)
 			if !checkAud {
@@ -45,13 +48,17 @@ func JWTMiddleware() *jwtmiddleware.JWTMiddleware {
 		},
 		SigningMethod: jwt.SigningMethodRS256,
 	})
+	fmt.Println("############## 666 ################")
 	return jwtMiddleware
 }
 
 func getPemCert(token *jwt.Token) (string, error) {
+	fmt.Println("############## 777 ################")
 	cert := ""
 	resp, err := http.Get("https://hengel28.auth0.com/.well-known/jwks.json")
-
+	fmt.Println(resp)
+	fmt.Println(err)
+	fmt.Println("############## 888 ################")
 	if err != nil {
 		return cert, err
 	}
