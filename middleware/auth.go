@@ -37,6 +37,7 @@ func JWTMiddleware() *jwtmiddleware.JWTMiddleware {
 			}
 			cert, err := getPemCert(token)
 			if err != nil {
+				return token, errors.New("request cert error")
 				fmt.Println("######### NO CERT ########")
 				fmt.Println(err)
 			}
