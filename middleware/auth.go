@@ -23,10 +23,8 @@ type JSONWebKeys struct {
 }
 
 func JWTMiddleware() *jwtmiddleware.JWTMiddleware {
-	fmt.Println("############## 444 ################")
 	jwtMiddleware := jwtmiddleware.New(jwtmiddleware.Options {
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-			fmt.Println("############## 555 ################")
 			aud := "https://api.docli.com"
 			checkAud := token.Claims.(jwt.MapClaims).VerifyAudience(aud, false)
 			if !checkAud {
@@ -48,25 +46,25 @@ func JWTMiddleware() *jwtmiddleware.JWTMiddleware {
 		},
 		SigningMethod: jwt.SigningMethodRS256,
 	})
-	fmt.Println("############## 666 ################")
 	return jwtMiddleware
 }
 
 func getPemCert(token *jwt.Token) (string, error) {
-	fmt.Println("############## 777 ################")
+	fmt.Println("############## 111 ################")
 	cert := ""
 	resp, err := http.Get("https://hengel28.auth0.com/.well-known/jwks.json")
+	fmt.Println("############## 222 ################")
 	fmt.Println(resp)
 	fmt.Println(err)
-	fmt.Println("############## 888 ################")
+	fmt.Println("############## 333 ################")
 	if err != nil {
 		return cert, err
 	}
 	defer resp.Body.Close()
-
+	fmt.Println("############## 444 ################")
 	var jwks = Jwks{}
 	err = json.NewDecoder(resp.Body).Decode(&jwks)
-
+	fmt.Println("############## 555 ################")
 	if err != nil {
 		return cert, err
 	}
@@ -82,6 +80,6 @@ func getPemCert(token *jwt.Token) (string, error) {
 		err := errors.New("Unable to find appropriate key.")
 		return cert, err
 	}
-
+	fmt.Println("############## 666 ################")
 	return cert, nil
 }
