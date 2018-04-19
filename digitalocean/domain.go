@@ -21,7 +21,6 @@ func (t *TokenSource) Token() (*oauth2.Token, error) {
 
 var token string
 func CreateSubdomain(subdomain string) error {
-	fmt.Println("### " + token)
 	tokenSource := &TokenSource{
 		AccessToken: token,
 	}
@@ -33,10 +32,11 @@ func CreateSubdomain(subdomain string) error {
 		Data: "46.101.222.225",
 		TTL: 3600,
 	}
-	domainRecord, _, err := client.Domains.CreateRecord(context.TODO(), "valas.cloud", createRequest)
+	fmt.Println("### TOKEN: " + token)
+	_, _, err := client.Domains.CreateRecord(context.TODO(), "valas.cloud", createRequest)
 	if err != nil {
+		fmt.Println(err)
 		return errors.New("error creating domain record")
 	}
-	fmt.Println(domainRecord)
 	return nil
 }
