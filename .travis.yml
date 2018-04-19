@@ -10,6 +10,7 @@ install:
   - dep ensure
 after_install:
   - rm -rf $GOPATH/src/github.com/docker/docker/vendor/github.com/docker/go-connections
+  - export DO_TOKEN=$DO_TOKEN
 
 script:
   - go build -o api_docli_app

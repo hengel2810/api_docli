@@ -21,8 +21,9 @@ func (t *TokenSource) Token() (*oauth2.Token, error) {
 }
 
 func CreateSubdomain(subdomain string) error {
+	token := os.Getenv("DO_TOKEN")
 	tokenSource := &TokenSource{
-		AccessToken: os.Getenv("DO_TOKEN"),
+		AccessToken: token,
 	}
 	oauthClient := oauth2.NewClient(context.Background(), tokenSource)
 	client := godo.NewClient(oauthClient)
