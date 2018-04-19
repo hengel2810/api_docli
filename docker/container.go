@@ -76,7 +76,7 @@ func ConnectToNetwork(containerId string, networkId string) error {
 
 
 func generateConfigs(docli models.DocliObject) (*container.Config, *container.HostConfig, error) {
-	exposedPorts, portBindings, err := createPorts(docli)
+	exposedPorts, _, err := createPorts(docli)
 	if err != nil {
 		return &container.Config{}, &container.HostConfig{}, err
 	}
@@ -97,7 +97,7 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 		//Binds: []string{
 		//	"/var/run/docker.sock:/var/run/docker.sock",
 		//},
-		PortBindings: portBindings,
+		//PortBindings: portBindings,
 	}
 	return config, hostConfig, nil
 }
