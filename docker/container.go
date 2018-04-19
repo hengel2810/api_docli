@@ -76,10 +76,6 @@ func ConnectToNetwork(containerId string, networkId string) error {
 
 
 func generateConfigs(docli models.DocliObject) (*container.Config, *container.HostConfig, error) {
-	exposedPorts, portBindings, err := createPorts(docli)
-	if err != nil {
-		return &container.Config{}, &container.HostConfig{}, err
-	}
 	url := "Host:" + docli.ContainerName + ".valas.cloud"
 	labels := map[string]string{
 		"traefik.backend": docli.ContainerName,
@@ -90,41 +86,18 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 	}
 	config := &container.Config {
 		Image: docli.FullName,
-		ExposedPorts: exposedPorts,
+		ExposedPorts: nat.PortSet{},
 		Labels: labels,
 	}
 	hostConfig := &container.HostConfig {
 		Binds: []string{},
-		PortBindings: portBindings,
+		PortBindings: nat.PortMap{},
 		NetworkMode: "web",
 		RestartPolicy: container.RestartPolicy{
 			Name: "always",
 			MaximumRetryCount: 0,
 		},
 		VolumesFrom: []string{},
-
 	}
 	return config, hostConfig, nil
-}
-
-func createPorts(docli models.DocliObject) (nat.PortSet, nat.PortMap, error) {
-	exposedPorts := nat.PortSet{}
-	portBindings := nat.PortMap{}
-	/*
-	for _, serverPort := range docli.ServerPorts {
-		port, err := nat.NewPort("tcp", strconv.Itoa(serverPort.Container))
-		if err != nil {
-			return exposedPorts, portBindings, errors.New("error creating port")
-		}
-		exposedPorts[port] = struct{}{}
-		//portBindings[port] = nil
-		portBindings[port] = []nat.PortBinding {
-			{
-				HostIP: "0.0.0.0",
-				HostPort: strconv.Itoa(serverPort.Host),
-			},
-		}
-	}
-	*/
-	return exposedPorts, portBindings, nil
 }
