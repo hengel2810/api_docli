@@ -83,7 +83,7 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 	url := "Host:" + docli.ContainerName + ".valas.cloud"
 	labels := map[string]string{
 		"traefik.backend": docli.ContainerName,
-		"traefik.docker.network": "traefik",
+		"traefik.docker.network": "web",
 		"traefik.frontend.rule": url,
 		"traefik.enable": "true",
 		"traefik.port": strconv.Itoa(docli.ServerPorts[0].Host),
@@ -94,11 +94,15 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 		Labels: labels,
 	}
 	hostConfig := &container.HostConfig {
-		//Binds: []string{
-		//	"/var/run/docker.sock:/var/run/docker.sock",
-		//},
-		//PortBindings: portBindings,
+		Binds: []string{},
+		PortBindings: nat.PortMap{},
 		NetworkMode: "web",
+		RestartPolicy: container.RestartPolicy{
+			Name: "always",
+			MaximumRetryCount: 0,
+		},
+		VolumesFrom: []string{},
+
 	}
 	return config, hostConfig, nil
 }
