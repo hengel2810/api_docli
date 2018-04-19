@@ -14,12 +14,6 @@ func SetupDocli(docli models.DocliObject) error {
 			RemoveImage(docli.FullName)
 			return err
 		}
-		err = ConnectToNetwork(docli.ContainerName, "web")
-		if err != nil {
-			RemoveImage(docli.FullName)
-			StopContainer(docli)
-			return err
-		}
 	}
 	return err
 }
