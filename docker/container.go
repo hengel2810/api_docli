@@ -111,12 +111,15 @@ func createPorts(docli models.DocliObject) (nat.PortSet, nat.PortMap, error) {
 			return exposedPorts, portBindings, errors.New("error creating port")
 		}
 		exposedPorts[port] = struct{}{}
+		portBindings[port] = nil
+		/*
 		portBindings[port] = []nat.PortBinding {
 			{
 				HostIP: "0.0.0.0",
 				HostPort: strconv.Itoa(serverPort.Host),
 			},
 		}
+		*/
 	}
 	return exposedPorts, portBindings, nil
 }
