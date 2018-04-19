@@ -86,7 +86,7 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 		"traefik.docker.network": "web",
 		"traefik.frontend.rule": url,
 		"traefik.enable": "true",
-		"traefik.port": strconv.Itoa(docli.ServerPorts[0].Host),
+		"traefik.port": strconv.Itoa(docli.ServerPorts[0].Container),
 	}
 	config := &container.Config {
 		Image: docli.FullName,
@@ -110,6 +110,7 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 func createPorts(docli models.DocliObject) (nat.PortSet, nat.PortMap, error) {
 	exposedPorts := nat.PortSet{}
 	portBindings := nat.PortMap{}
+	/*
 	for _, serverPort := range docli.ServerPorts {
 		port, err := nat.NewPort("tcp", strconv.Itoa(serverPort.Container))
 		if err != nil {
@@ -124,5 +125,6 @@ func createPorts(docli models.DocliObject) (nat.PortSet, nat.PortMap, error) {
 			},
 		}
 	}
+	*/
 	return exposedPorts, portBindings, nil
 }
