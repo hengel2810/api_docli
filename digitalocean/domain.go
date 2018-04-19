@@ -22,6 +22,7 @@ func (t *TokenSource) Token() (*oauth2.Token, error) {
 
 func CreateSubdomain(subdomain string) error {
 	token := os.Getenv("DO_TOKEN")
+	fmt.Println("### TOKEN: " + token)
 	tokenSource := &TokenSource{
 		AccessToken: token,
 	}
