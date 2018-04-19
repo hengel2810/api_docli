@@ -32,8 +32,6 @@ func CreateSubdomain(subdomain string) error {
 		Data: "46.101.222.225",
 		TTL: 3600,
 	}
-	fmt.Println("### TOKEN: " + token)
-	fmt.Println("### " + subdomain)
 	_, _, err := client.Domains.CreateRecord(context.TODO(), "valas.cloud", createRequest)
 	if err != nil {
 		fmt.Println(err)
