@@ -108,19 +108,19 @@ func HandleDeleteDocli(w http.ResponseWriter, r *http.Request) {
 	docli, err := database.DocliFromDocliId(docliId)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("error querying docli"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 	err = digitalocean.DeleteSubdomain(docli.ContainerName, docli.DomainRecordID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("error delete subdomain"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 	err = database.RemoveDocli(docliId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("db error"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 	w.WriteHeader(http.StatusOK)
