@@ -20,7 +20,7 @@ func (t *TokenSource) Token() (*oauth2.Token, error) {
 }
 
 var token string
-func CreateSubdomain(subdomain string) error {
+func CreateSubdomain(subdomain string) (int, error) {
 	tokenSource := &TokenSource{
 		AccessToken: token,
 	}
@@ -32,8 +32,22 @@ func CreateSubdomain(subdomain string) error {
 		Data: "46.101.222.225",
 		TTL: 3600,
 	}
-	_, _, err := client.Domains.CreateRecord(context.TODO(), "valas.cloud", createRequest)
-	if err != nil {
+	record, response, err := client.Domains.CreateRecord(context.TODO(), "valas.cloud", createRequest)
+	if err != nil || response.StatusCode != 200 {
+		fmt.Println(err)
+		return 0, errors.New("error creating domain record")
+	}
+	return record.ID, nil
+}
+
+func DeleteSubdomain(subdomain string, recordId int) error {
+	tokenSource := &TokenSource{
+		AccessToken: token,
+	}
+	oauthClient := oauth2.NewClient(context.Background(), tokenSource)
+	client := godo.NewClient(oauthClient)
+	resp, err := client.Domains.DeleteRecord(context.TODO(), subdomain, recordId)
+	if err != nil || resp.StatusCode != 200 {
 		fmt.Println(err)
 		return errors.New("error creating domain record")
 	}

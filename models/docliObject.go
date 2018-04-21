@@ -33,6 +33,7 @@ type DocliObject struct {
 	Volumes []string `json:"volumes"`
 	Uploaded time.Time
 	ContainerName string
+	DomainRecordID int
 }
 
 type PortObject struct {

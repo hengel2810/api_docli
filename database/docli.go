@@ -29,7 +29,7 @@ func InsertDocli(docli models.DocliObject) (bson.ObjectId, error) {
 	return docli.Id, nil
 }
 
-func RemoveDocli(objectId bson.ObjectId) error {
+func RemoveDocli(uniqueId string) error {
 	mongoURL := os.Getenv("MONGOURL")
 	if mongoURL == "" {
 		mongoURL = "localhost"
@@ -41,26 +41,49 @@ func RemoveDocli(objectId bson.ObjectId) error {
 	defer session.Close()
 	session.SetSafe(&mgo.Safe{})
 	collection := session.DB("main").C("images")
-	err = collection.Remove(bson.M{"_id": objectId.Hex()})
+	err = collection.Remove(bson.M{"uniqueid": uniqueId})
 	if err != nil {
-		fmt.Println(objectId.Hex())
 		fmt.Println(err)
 		return errors.New("remove docli from mongodb fail")
 	}
 	return nil
 }
 
-func LoadImages() ([]models.DocliObject, error) {
+func LoadDoclis(userId string) ([]models.DocliObject, error) {
 	var results []models.DocliObject
-	session, err := mgo.Dial("mongo_db:27017")
+	mongoURL := os.Getenv("MONGOURL")
+	if mongoURL == "" {
+		mongoURL = "localhost"
+	}
+	session, err := mgo.Dial(mongoURL)
 	if err != nil {
 		return results, errors.New("error connecting to mongodb")
 	}
 	defer session.Close()
 	c := session.DB("main").C("images")
-	err = c.Find(bson.M{}).All(&results)
+	err = c.Find(bson.M{"userid": "1231ds4"}).All(&results)
 	if err != nil {
 		return results, errors.New("error loading images from mongodb")
 	}
 	return results, nil
+}
+
+
+func DocliFromDocliId(docliId string) (models.DocliObject, error) {
+	var result models.DocliObject
+	mongoURL := os.Getenv("MONGOURL")
+	if mongoURL == "" {
+		mongoURL = "localhost"
+	}
+	session, err := mgo.Dial(mongoURL)
+	if err != nil {
+		return result, errors.New("error connecting to mongodb")
+	}
+	defer session.Close()
+	c := session.DB("main").C("images")
+	err = c.Find(bson.M{"uniqueid": docliId}).All(&result)
+	if err != nil {
+		return result, errors.New("error loading images from mongodb")
+	}
+	return result, nil
 }
