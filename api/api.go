@@ -42,10 +42,10 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 					handleWriter(w, http.StatusInternalServerError, err.Error())
 				}
 			} else {
-				handleWriter(w, http.StatusBadRequest, "error creatin subdomain")
+				handleWriter(w, http.StatusBadRequest, err.Error())
 			}
 		} else {
-			handleWriter(w, http.StatusBadRequest, "wrong request object")
+			handleWriter(w, http.StatusBadRequest, err.Error())
 		}
 	}
 }
@@ -85,13 +85,13 @@ func HandleGetDoclis(w http.ResponseWriter, r *http.Request) {
 	images, err := database.LoadDoclis(userId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("db error"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 	jsonData, err := json.Marshal(images)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("db error"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 	w.WriteHeader(http.StatusOK)
