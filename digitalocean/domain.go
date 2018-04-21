@@ -33,7 +33,7 @@ func CreateSubdomain(subdomain string) (int, error) {
 		TTL: 3600,
 	}
 	record, response, err := client.Domains.CreateRecord(context.TODO(), "valas.cloud", createRequest)
-	if err != nil || response.StatusCode != 200 {
+	if err != nil || response.StatusCode != 201 {
 		fmt.Println(err)
 		fmt.Println(response.StatusCode)
 		return 0, errors.New("error creating domain record")
