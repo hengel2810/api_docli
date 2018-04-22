@@ -6,7 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"encoding/json"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 type Jwks struct {
@@ -28,18 +28,18 @@ func JWTMiddleware() *jwtmiddleware.JWTMiddleware {
 			aud := "https://api.docli.com"
 			checkAud := token.Claims.(jwt.MapClaims).VerifyAudience(aud, false)
 			if !checkAud {
-				logrus.WithFields(logrus.Fields{"function": "JWTMiddleware",}).Error(errors.New("Invalid audience."))
+				log.WithFields(log.Fields{"function": "JWTMiddleware",}).Error(errors.New("Invalid audience."))
 				return token, errors.New("Invalid audience.")
 			}
 			iss := "https://hengel28.auth0.com/"
 			checkIss := token.Claims.(jwt.MapClaims).VerifyIssuer(iss, false)
 			if !checkIss {
-				logrus.WithFields(logrus.Fields{"function": "JWTMiddleware",}).Error(errors.New("Invalid issuer."))
+				log.WithFields(log.Fields{"function": "JWTMiddleware",}).Error(errors.New("Invalid issuer."))
 				return token, errors.New("Invalid issuer.")
 			}
 			cert, err := getPemCert(token)
 			if err != nil {
-				logrus.WithFields(logrus.Fields{"function": "JWTMiddleware",}).Error(errors.New("request cert error"))
+				log.WithFields(log.Fields{"function": "JWTMiddleware",}).Error(errors.New("request cert error"))
 				return token, errors.New("request cert error")
 			}
 			result, _ := jwt.ParseRSAPublicKeyFromPEM([]byte(cert))
