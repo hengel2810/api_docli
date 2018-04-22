@@ -7,6 +7,7 @@ import (
 	"os"
 	"errors"
 	"fmt"
+	"time"
 )
 
 func InsertDocli(docli models.DocliObject) (bson.ObjectId, error) {
@@ -14,13 +15,17 @@ func InsertDocli(docli models.DocliObject) (bson.ObjectId, error) {
 	if mongoURL == "" {
 		mongoURL = "localhost"
 	}
-	session, err := mgo.Dial(mongoURL + ":27017")
+	session, err := mgo.DialWithInfo(&mgo.DialInfo{
+		Addrs:[]string{mongoURL + ":27017"},
+		Timeout:  60 * time.Second,
+		Username: "root",
+		Password: os.Getenv("MONGO_PASSWORD"),
+	})
 	if err != nil {
 		return "", errors.New("error connecting to mongodb")
 	}
 	defer session.Close()
 	database := session.DB("main")
-	database.Login("root",os.Getenv("MONGO_PASSWORD"))
 	collection := database.C("images")
 	docli.Id = bson.NewObjectId()
 	bson.NewObjectId()
@@ -36,14 +41,18 @@ func RemoveDocli(uniqueId string) error {
 	if mongoURL == "" {
 		mongoURL = "localhost"
 	}
-	session, err := mgo.Dial(mongoURL)
+	session, err := mgo.DialWithInfo(&mgo.DialInfo{
+		Addrs:[]string{mongoURL + ":27017"},
+		Timeout:  60 * time.Second,
+		Username: "root",
+		Password: os.Getenv("MONGO_PASSWORD"),
+	})
 	if err != nil {
 		return errors.New("error connecting to mongodb")
 	}
 	defer session.Close()
 	session.SetSafe(&mgo.Safe{})
 	database := session.DB("main")
-	database.Login("root",os.Getenv("MONGO_PASSWORD"))
 	collection := database.C("images")
 	err = collection.Remove(bson.M{"uniqueid": uniqueId})
 	if err != nil {
@@ -59,13 +68,17 @@ func LoadDoclis(userId string) ([]models.DocliObject, error) {
 	if mongoURL == "" {
 		mongoURL = "localhost"
 	}
-	session, err := mgo.Dial(mongoURL)
+	session, err := mgo.DialWithInfo(&mgo.DialInfo{
+		Addrs:[]string{mongoURL + ":27017"},
+		Timeout:  60 * time.Second,
+		Username: "root",
+		Password: os.Getenv("MONGO_PASSWORD"),
+	})
 	if err != nil {
 		return results, errors.New("error connecting to mongodb")
 	}
 	defer session.Close()
 	database := session.DB("main")
-	database.Login("root",os.Getenv("MONGO_PASSWORD"))
 	collection := database.C("images")
 	err = collection.Find(bson.M{"userid": userId}).All(&results)
 	if err != nil {
@@ -81,13 +94,17 @@ func DocliFromDocliId(docliId string) (models.DocliObject, error) {
 	if mongoURL == "" {
 		mongoURL = "localhost"
 	}
-	session, err := mgo.Dial(mongoURL)
+	session, err := mgo.DialWithInfo(&mgo.DialInfo{
+		Addrs:[]string{mongoURL + ":27017"},
+		Timeout:  60 * time.Second,
+		Username: "root",
+		Password: os.Getenv("MONGO_PASSWORD"),
+	})
 	if err != nil {
 		return models.DocliObject{}, errors.New("error connecting to mongodb")
 	}
 	defer session.Close()
 	database := session.DB("main")
-	database.Login("root",os.Getenv("MONGO_PASSWORD"))
 	collection := database.C("images")
 	err = collection.Find(bson.M{"uniqueid": docliId}).All(&result)
 	if err != nil {
