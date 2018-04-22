@@ -12,7 +12,6 @@ import (
 	"github.com/hengel2810/api_docli/docker"
 	"github.com/hengel2810/api_docli/database"
 	"github.com/hengel2810/api_docli/helper"
-	"fmt"
 	"github.com/hengel2810/api_docli/digitalocean"
 	log "github.com/sirupsen/logrus"
 )
@@ -37,7 +36,6 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 				id, err := digitalocean.CreateSubdomain(docli.ContainerName)
 				if err == nil {
 					docli.DomainRecordID = id
-					fmt.Println(docli.DomainRecordID)
 					err = docker.SetupDocli(docli)
 					if err == nil {
 						_, err := database.InsertDocli(docli)

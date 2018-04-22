@@ -6,7 +6,6 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"os"
 	"errors"
-	"fmt"
 	"time"
 )
 
@@ -56,7 +55,6 @@ func RemoveDocli(uniqueId string) error {
 	collection := database.C("images")
 	err = collection.Remove(bson.M{"uniqueid": uniqueId})
 	if err != nil {
-		fmt.Println(err)
 		return errors.New("remove docli from mongodb fail")
 	}
 	return nil
