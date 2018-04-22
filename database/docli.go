@@ -41,7 +41,9 @@ func RemoveDocli(uniqueId string) error {
 	defer session.Close()
 	session.SetSafe(&mgo.Safe{})
 	collection := session.DB("main").C("images")
+	fmt.Println("############### PRE REMOVE")
 	err = collection.Remove(bson.M{"uniqueid": uniqueId})
+	fmt.Println("############### POST REMOVE")
 	if err != nil {
 		fmt.Println(err)
 		return errors.New("remove docli from mongodb fail")
@@ -61,7 +63,7 @@ func LoadDoclis(userId string) ([]models.DocliObject, error) {
 	}
 	defer session.Close()
 	c := session.DB("main").C("images")
-	err = c.Find(bson.M{"userid": "1231ds4"}).All(&results)
+	err = c.Find(bson.M{"userid": userId}).All(&results)
 	if err != nil {
 		return results, errors.New("error loading images from mongodb")
 	}
