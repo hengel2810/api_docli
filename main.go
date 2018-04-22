@@ -6,10 +6,11 @@ import (
 	"github.com/hengel2810/api_docli/middleware"
 	"github.com/codegangsta/negroni"
 	"github.com/hengel2810/api_docli/api"
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
+	log.SetFormatter(&log.JSONFormatter{})
 	router := mux.NewRouter()
 	router.HandleFunc("/test", testAPI).Methods("GET")
 	jwtMiddleware := middleware.JWTMiddleware()

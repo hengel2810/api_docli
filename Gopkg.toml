@@ -54,3 +54,6 @@
   branch = "master"
   name = "golang.org/x/oauth2"
 
+[[dependencies]]
+  branch = "master"
+  name = "github.com/sirupsen/logrus"
