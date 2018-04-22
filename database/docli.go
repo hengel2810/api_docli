@@ -19,7 +19,9 @@ func InsertDocli(docli models.DocliObject) (bson.ObjectId, error) {
 		return "", errors.New("error connecting to mongodb")
 	}
 	defer session.Close()
-	collection := session.DB("main").C("images")
+	database := session.DB("main")
+	database.Login("root",os.Getenv("MONGO_PASSWORD"))
+	collection := database.C("images")
 	docli.Id = bson.NewObjectId()
 	bson.NewObjectId()
 	err = collection.Insert(docli)
@@ -40,7 +42,9 @@ func RemoveDocli(uniqueId string) error {
 	}
 	defer session.Close()
 	session.SetSafe(&mgo.Safe{})
-	collection := session.DB("main").C("images")
+	database := session.DB("main")
+	database.Login("root",os.Getenv("MONGO_PASSWORD"))
+	collection := database.C("images")
 	err = collection.Remove(bson.M{"uniqueid": uniqueId})
 	if err != nil {
 		fmt.Println(err)
@@ -60,8 +64,10 @@ func LoadDoclis(userId string) ([]models.DocliObject, error) {
 		return results, errors.New("error connecting to mongodb")
 	}
 	defer session.Close()
-	c := session.DB("main").C("images")
-	err = c.Find(bson.M{"userid": userId}).All(&results)
+	database := session.DB("main")
+	database.Login("root",os.Getenv("MONGO_PASSWORD"))
+	collection := database.C("images")
+	err = collection.Find(bson.M{"userid": userId}).All(&results)
 	if err != nil {
 		return results, errors.New("error loading images from mongodb")
 	}
@@ -80,8 +86,10 @@ func DocliFromDocliId(docliId string) (models.DocliObject, error) {
 		return models.DocliObject{}, errors.New("error connecting to mongodb")
 	}
 	defer session.Close()
-	c := session.DB("main").C("images")
-	err = c.Find(bson.M{"uniqueid": docliId}).All(&result)
+	database := session.DB("main")
+	database.Login("root",os.Getenv("MONGO_PASSWORD"))
+	collection := database.C("images")
+	err = collection.Find(bson.M{"uniqueid": docliId}).All(&result)
 	if err != nil {
 		return models.DocliObject{}, errors.New("error loading images from mongodb")
 	}
