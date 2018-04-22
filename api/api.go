@@ -42,10 +42,12 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 						if err == nil {
 							w.WriteHeader(http.StatusOK)
 						} else {
+							clearFailedRequest(docli, true)
 							log.WithFields(log.Fields{"function": "database.InsertDocli",}).Error(err)
 							handleWriter(w, http.StatusInternalServerError, err.Error())
 						}
 					} else {
+						clearFailedRequest(docli, false)
 						log.WithFields(log.Fields{"function": "docker.SetupDocli",}).Error(err)
 						handleWriter(w, http.StatusInternalServerError, err.Error())
 					}
@@ -60,6 +62,19 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 		} else {
 			log.WithFields(log.Fields{"function": "models.DocliObjectValid",}).Error(errors.New("docli object from request invalid"))
 			handleWriter(w, http.StatusBadRequest, err.Error())
+		}
+	}
+}
+
+func clearFailedRequest(docli models.DocliObject, includeDocker bool) {
+	deleteSubdomainError := digitalocean.DeleteSubdomain(docli.DomainRecordID)
+	if deleteSubdomainError != nil {
+		log.WithFields(log.Fields{"function": "digitalocean.DeleteSubdomain",}).Error(deleteSubdomainError)
+	}
+	if includeDocker {
+		removeDocliError := docker.RemoveDocli(docli)
+		if removeDocliError != nil {
+			log.WithFields(log.Fields{"function": "docker.RemoveDocli",}).Error(removeDocliError)
 		}
 	}
 }
