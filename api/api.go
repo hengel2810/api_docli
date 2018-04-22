@@ -9,15 +9,23 @@ import (
 	"strings"
 	"github.com/phayes/freeport"
 	"errors"
-	"github.com/hengel2810/api_docli/digitalocean"
 	"github.com/hengel2810/api_docli/docker"
 	"github.com/hengel2810/api_docli/database"
+	"github.com/hengel2810/api_docli/helper"
+	"fmt"
+	"github.com/hengel2810/api_docli/digitalocean"
 )
 
 func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	defer r.Body.Close()
 	var docli models.DocliObject
+	userId := helper.UserIdFromRequest(r)
+	if userId == "" {
+		handleWriter(w, http.StatusInternalServerError, "no user id found")
+		return
+	}
+	docli.UserId = userId
 	err := decoder.Decode(&docli)
 	if err == nil {
 		validImage := models.DocliObjectValid(docli)
@@ -27,6 +35,7 @@ func HandlePostImage(w http.ResponseWriter, r *http.Request) {
 				id, err := digitalocean.CreateSubdomain(docli.ContainerName)
 				if err == nil {
 					docli.DomainRecordID = id
+					fmt.Println(docli.DomainRecordID)
 					err = docker.SetupDocli(docli)
 					if err == nil {
 						_, err := database.InsertDocli(docli)
@@ -111,12 +120,25 @@ func HandleDeleteDocli(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	err = digitalocean.DeleteSubdomain(docli.ContainerName, docli.DomainRecordID)
+	err = digitalocean.DeleteSubdomain(docli.DomainRecordID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
+	err = docker.StopContainer(docli)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	err = docker.RemoveImage(docli.FullName)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
 	err = database.RemoveDocli(docliId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

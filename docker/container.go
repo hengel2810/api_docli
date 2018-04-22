@@ -16,29 +16,38 @@ import (
 func StartContainer(docli models.DocliObject) error {
 	cli, err := client.NewEnvClient()
 	if err != nil {
-		return errors.New("error creating docker client")
+		errorMsg := "error creating docker client"
+		fmt.Println(errorMsg + " - " + err.Error())
+		return errors.New(errorMsg)
 	}
 	config, hostConfig, err := generateConfigs(docli)
 	if err != nil {
-		return err
+		errorMsg := "error generating config"
+		fmt.Println(errorMsg + " - " + err.Error())
+		return errors.New(errorMsg)
 	}
 	networkConfig := &network.NetworkingConfig{
 		EndpointsConfig: map[string]*network.EndpointSettings{
+			/*
 			"web": &network.EndpointSettings{
 				Aliases:[]string{docli.ContainerName},
 				NetworkID:"98a8dacee24757b5b060ea7a03bfc9e2f00d8a3faca93b6b39f9034390eb4044",
 			},
+			*/
 		},
 	}
 	resp, err := cli.ContainerCreate(context.Background(), config, hostConfig, networkConfig, docli.ContainerName)
 	if err != nil {
-		fmt.Println(err)
-		return errors.New("error creating docker container")
+		errorMsg := "error creating docker container"
+		fmt.Println(errorMsg + " - " + err.Error())
+		return errors.New(errorMsg)
 	}
 	err = cli.ContainerStart(context.Background(), resp.ID, types.ContainerStartOptions{})
 	if err != nil {
 		StopContainer(docli)
-		return errors.New("error starting docker container")
+		errorMsg := "error starting docker container"
+		fmt.Println(errorMsg + " - " + err.Error())
+		return errors.New(errorMsg)
 	}
 	return nil
 }
@@ -92,7 +101,7 @@ func generateConfigs(docli models.DocliObject) (*container.Config, *container.Ho
 	hostConfig := &container.HostConfig {
 		Binds: []string{},
 		PortBindings: nat.PortMap{},
-		NetworkMode: "web",
+		//NetworkMode: "web",
 		RestartPolicy: container.RestartPolicy{
 			Name: "always",
 			MaximumRetryCount: 0,

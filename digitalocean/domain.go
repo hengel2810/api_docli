@@ -41,16 +41,15 @@ func CreateSubdomain(subdomain string) (int, error) {
 	return record.ID, nil
 }
 
-func DeleteSubdomain(subdomain string, recordId int) error {
+func DeleteSubdomain(recordId int) error {
 	tokenSource := &TokenSource{
 		AccessToken: token,
 	}
 	oauthClient := oauth2.NewClient(context.Background(), tokenSource)
 	client := godo.NewClient(oauthClient)
-	resp, err := client.Domains.DeleteRecord(context.TODO(), subdomain, recordId)
-	if err != nil || resp.StatusCode != 200 {
-		fmt.Println(err)
-		return errors.New("error creating domain record")
+	resp, err := client.Domains.DeleteRecord(context.TODO(), "valas.cloud", recordId)
+	if err != nil || resp.StatusCode != 204 {
+		return errors.New("error deleting domain record")
 	}
 	return nil
 }

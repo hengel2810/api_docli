@@ -41,9 +41,7 @@ func RemoveDocli(uniqueId string) error {
 	defer session.Close()
 	session.SetSafe(&mgo.Safe{})
 	collection := session.DB("main").C("images")
-	fmt.Println("############### PRE REMOVE")
 	err = collection.Remove(bson.M{"uniqueid": uniqueId})
-	fmt.Println("############### POST REMOVE")
 	if err != nil {
 		fmt.Println(err)
 		return errors.New("remove docli from mongodb fail")
@@ -72,20 +70,24 @@ func LoadDoclis(userId string) ([]models.DocliObject, error) {
 
 
 func DocliFromDocliId(docliId string) (models.DocliObject, error) {
-	var result models.DocliObject
+	var result []models.DocliObject
 	mongoURL := os.Getenv("MONGOURL")
 	if mongoURL == "" {
 		mongoURL = "localhost"
 	}
 	session, err := mgo.Dial(mongoURL)
 	if err != nil {
-		return result, errors.New("error connecting to mongodb")
+		return models.DocliObject{}, errors.New("error connecting to mongodb")
 	}
 	defer session.Close()
 	c := session.DB("main").C("images")
 	err = c.Find(bson.M{"uniqueid": docliId}).All(&result)
 	if err != nil {
-		return result, errors.New("error loading images from mongodb")
+		return models.DocliObject{}, errors.New("error loading images from mongodb")
 	}
-	return result, nil
+	if len(result) != 1 {
+		return models.DocliObject{}, errors.New("multiple doclis with id in database")
+	}
+	docliObject := result[0]
+	return docliObject, nil
 }
